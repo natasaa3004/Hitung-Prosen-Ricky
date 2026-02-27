@@ -1,100 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Target & Hasil Penjualan</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      font-family: Arial;
-      background: #f5f6fa;
-      padding: 20px;
-      max-width: 500px;
-      margin: auto;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 5px;
-    }
-
-    #tanggal {
-      text-align: center;
-      font-weight: bold;
-      margin-bottom: 20px;
-      color: #555;
-    }
-
-    .box {
-      background: white;
-      padding: 15px;
-      margin-bottom: 25px;
-      border-radius: 10px;
-      box-shadow: 0 0 5px #ccc;
-    }
-
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin: 6px 0;
-      font-size: 16px;
-    }
-
-    button {
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .hasil {
-      margin-top: 12px;
-      font-weight: bold;
-      line-height: 1.7;
-    }
-  </style>
-</head>
-
-<body>
-
-<h2>📊 Target & Hasil Penjualan</h2>
-<div id="tanggal"></div>
-
-<!-- HARIAN -->
-<div class="box">
-
-  <h3>TARGET DAN HASIL HARIAN</h3>
-
-  <input type="number" id="targetHarian" placeholder="Target Weekdays / Weekend (Rp)">
-  <input type="number" id="hasilHarian" placeholder="Hasil Harian (Rp)">
-
-  <button onclick="hitungHarian()">Hitung</button>
-
-  <div class="hasil" id="outputHarian"></div>
-
-</div>
-
-<!-- BULANAN -->
-<div class="box">
-
-  <h3>TARGET DAN HASIL BULANAN</h3>
-
-  <input type="number" id="targetBulanan" placeholder="Target Bulanan (Rp)">
-  <input type="number" id="actualBulanan" placeholder="Actual Sales (Rp)">
-
-  <button onclick="hitungBulanan()">Hitung</button>
-
-  <div class="hasil" id="outputBulanan"></div>
-
-</div>
-
 <script>
 function formatRupiah(angka){
   return "Rp " + angka.toLocaleString("id-ID");
 }
 
-// Tampilkan tanggal hari ini
+// Tanggal otomatis
 function tampilkanTanggal(){
   let today = new Date();
 
@@ -122,6 +31,8 @@ function hitungHarian(){
   }
 
   let selisihRp = hasil - target;
+
+  // BULATIN %
   let persen = Math.round((hasil / target) * 100);
   let selisihPersen = persen - 100;
 
@@ -148,6 +59,8 @@ function hitungBulanan(){
   }
 
   let selisihRp = actual - target;
+
+  // BULATIN %
   let persen = Math.round((actual / target) * 100);
   let selisihPersen = persen - 100;
 
@@ -163,6 +76,3 @@ function hitungBulanan(){
   `;
 }
 </script>
-
-</body>
-</html>
