@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kalkulator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body style="text-align:center; font-family:Arial; margin-top:50px;">
+
+<h2>Kalkulator Online</h2>
+
+<input type="number" id="a" placeholder="Angka 1"><br><br>
+<input type="number" id="b" placeholder="Angka 2"><br><br>
+
+<button onclick="hitung('+')">+</button>
+<button onclick="hitung('-')">-</button>
+<button onclick="hitung('*')">×</button>
+<button onclick="hitung('/')">÷</button>
+
+<p id="hasil">Hasil:</p>
+
+<script>
+function hitung(op){
+  let x = Number(a.value);
+  let y = Number(b.value);
+  let h = 0;
+
+  if(op=='+') h=x+y;
+  if(op=='-') h=x-y;
+  if(op=='*') h=x*y;
+  if(op=='/') h=x/y;
+
+  hasil.innerHTML = "Hasil: " + h;
+}
+</script>
+
+</body>
+</html>
