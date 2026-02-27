@@ -1,36 +1,125 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Kalkulator</title>
+  <title>Target & Sales Tracker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f6fa;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .box {
+      background: white;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px #ccc;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      font-size: 16px;
+    }
+
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .hasil {
+      margin-top: 10px;
+      font-weight: bold;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 
-<body style="text-align:center; font-family:Arial; margin-top:50px;">
+<body>
 
-<h2>Kalkulator Online</h2>
+<h2>📊 Target & Sales Tracker</h2>
 
-<input type="number" id="a" placeholder="Angka 1"><br><br>
-<input type="number" id="b" placeholder="Angka 2"><br><br>
+<!-- HARIAN -->
+<div class="box">
+  <h3>Harian</h3>
 
-<button onclick="hitung('+')">+</button>
-<button onclick="hitung('-')">-</button>
-<button onclick="hitung('*')">×</button>
-<button onclick="hitung('/')">÷</button>
+  <input type="number" id="harian" placeholder="Hasil Harian">
+  <input type="number" id="targetHarian" placeholder="Target Weekdays / Weekend">
 
-<p id="hasil">Hasil:</p>
+  <button onclick="hitungHarian()">Hitung Harian</button>
+
+  <div class="hasil" id="hasilHarian"></div>
+</div>
+
+<!-- BULANAN -->
+<div class="box">
+  <h3>Bulanan</h3>
+
+  <input type="number" id="targetBulanan" placeholder="Target Bulanan">
+  <input type="number" id="actualBulanan" placeholder="Actual Sales">
+
+  <button onclick="hitungBulanan()">Hitung Bulanan</button>
+
+  <div class="hasil" id="hasilBulanan"></div>
+</div>
 
 <script>
-function hitung(op){
-  let x = Number(a.value);
-  let y = Number(b.value);
-  let h = 0;
+function hitungHarian() {
 
-  if(op=='+') h=x+y;
-  if(op=='-') h=x-y;
-  if(op=='*') h=x*y;
-  if(op=='/') h=x/y;
+  let hasil = Number(document.getElementById("harian").value);
+  let target = Number(document.getElementById("targetHarian").value);
 
-  hasil.innerHTML = "Hasil: " + h;
+  if(target === 0){
+    alert("Target tidak boleh 0");
+    return;
+  }
+
+  let persen = (hasil / target) * 100;
+  let selisih = hasil - target;
+
+  let status = selisih >= 0 ? "Lebih" : "Kurang";
+
+  document.getElementById("hasilHarian").innerHTML = `
+    Hasil Harian: ${hasil}<br>
+    Target: ${target}<br>
+    Pencapaian: ${persen.toFixed(2)}%<br>
+    ${status}: ${Math.abs(selisih)}
+  `;
+}
+
+function hitungBulanan() {
+
+  let target = Number(document.getElementById("targetBulanan").value);
+  let actual = Number(document.getElementById("actualBulanan").value);
+
+  if(target === 0){
+    alert("Target tidak boleh 0");
+    return;
+  }
+
+  let persen = (actual / target) * 100;
+  let selisih = actual - target;
+
+  let status = selisih >= 0 ? "Lebih" : "Kurang";
+
+  document.getElementById("hasilBulanan").innerHTML = `
+    Target Bulanan: ${target}<br>
+    Actual Sales: ${actual}<br>
+    Pencapaian: ${persen.toFixed(2)}%<br>
+    ${status}: ${Math.abs(selisih)}
+  `;
 }
 </script>
 
