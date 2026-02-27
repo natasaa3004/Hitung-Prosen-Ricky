@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Target & Sales Tracker</title>
+  <title>Target & Hasil Penjualan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -15,12 +15,13 @@
 
     h2 {
       text-align: center;
+      margin-bottom: 20px;
     }
 
     .box {
       background: white;
       padding: 15px;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       border-radius: 10px;
       box-shadow: 0 0 5px #ccc;
     }
@@ -28,7 +29,7 @@
     input, button {
       width: 100%;
       padding: 10px;
-      margin: 5px 0;
+      margin: 6px 0;
       font-size: 16px;
     }
 
@@ -37,69 +38,77 @@
       color: white;
       border: none;
       border-radius: 5px;
+      cursor: pointer;
     }
 
     .hasil {
-      margin-top: 10px;
+      margin-top: 12px;
       font-weight: bold;
-      line-height: 1.6;
+      line-height: 1.7;
     }
   </style>
 </head>
 
 <body>
 
-<h2>📊 Target & Sales Tracker</h2>
+<h2>📊 Target & Hasil Penjualan</h2>
 
 <!-- HARIAN -->
 <div class="box">
-  <h3>Harian</h3>
 
-  <input type="number" id="harian" placeholder="Hasil Harian">
+  <h3>TARGET DAN HASIL HARIAN</h3>
+
   <input type="number" id="targetHarian" placeholder="Target Weekdays / Weekend">
+  <input type="number" id="hasilHarian" placeholder="Hasil Harian">
 
-  <button onclick="hitungHarian()">Hitung Harian</button>
+  <button onclick="hitungHarian()">Hitung</button>
 
-  <div class="hasil" id="hasilHarian"></div>
+  <div class="hasil" id="outputHarian"></div>
+
 </div>
 
 <!-- BULANAN -->
 <div class="box">
-  <h3>Bulanan</h3>
+
+  <h3>TARGET DAN HASIL BULANAN</h3>
 
   <input type="number" id="targetBulanan" placeholder="Target Bulanan">
   <input type="number" id="actualBulanan" placeholder="Actual Sales">
 
-  <button onclick="hitungBulanan()">Hitung Bulanan</button>
+  <button onclick="hitungBulanan()">Hitung</button>
 
-  <div class="hasil" id="hasilBulanan"></div>
+  <div class="hasil" id="outputBulanan"></div>
+
 </div>
 
 <script>
-function hitungHarian() {
+function hitungHarian(){
 
-  let hasil = Number(document.getElementById("harian").value);
   let target = Number(document.getElementById("targetHarian").value);
+  let hasil = Number(document.getElementById("hasilHarian").value);
 
   if(target === 0){
     alert("Target tidak boleh 0");
     return;
   }
 
+  let selisihRp = hasil - target;
   let persen = (hasil / target) * 100;
-  let selisih = hasil - target;
+  let selisihPersen = persen - 100;
 
-  let status = selisih >= 0 ? "Lebih" : "Kurang";
+  let statusRp = selisihRp >= 0 ? "Lebih" : "Kurang";
+  let statusPersen = selisihPersen >= 0 ? "Lebih" : "Kurang";
 
-  document.getElementById("hasilHarian").innerHTML = `
-    Hasil Harian: ${hasil}<br>
-    Target: ${target}<br>
-    Pencapaian: ${persen.toFixed(2)}%<br>
-    ${status}: ${Math.abs(selisih)}
+  document.getElementById("outputHarian").innerHTML = `
+    Target Weekdays/Weekend : ${target}<br>
+    Hasil Harian : ${hasil}<br>
+    Selisih (${statusRp}) (Rp) : ${Math.abs(selisihRp)}<br>
+    Persentase Pencapaian Target : ${persen.toFixed(2)}%<br>
+    Selisih (${statusPersen}) (%) : ${Math.abs(selisihPersen).toFixed(2)}%
   `;
 }
 
-function hitungBulanan() {
+function hitungBulanan(){
 
   let target = Number(document.getElementById("targetBulanan").value);
   let actual = Number(document.getElementById("actualBulanan").value);
@@ -109,16 +118,19 @@ function hitungBulanan() {
     return;
   }
 
+  let selisihRp = actual - target;
   let persen = (actual / target) * 100;
-  let selisih = actual - target;
+  let selisihPersen = persen - 100;
 
-  let status = selisih >= 0 ? "Lebih" : "Kurang";
+  let statusRp = selisihRp >= 0 ? "Lebih" : "Kurang";
+  let statusPersen = selisihPersen >= 0 ? "Lebih" : "Kurang";
 
-  document.getElementById("hasilBulanan").innerHTML = `
-    Target Bulanan: ${target}<br>
-    Actual Sales: ${actual}<br>
-    Pencapaian: ${persen.toFixed(2)}%<br>
-    ${status}: ${Math.abs(selisih)}
+  document.getElementById("outputBulanan").innerHTML = `
+    Target Bulanan : ${target}<br>
+    Actual Sales : ${actual}<br>
+    Selisih (${statusRp}) (Rp) : ${Math.abs(selisihRp)}<br>
+    Persentase Pencapaian Target : ${persen.toFixed(2)}%<br>
+    Selisih (${statusPersen}) (%) : ${Math.abs(selisihPersen).toFixed(2)}%
   `;
 }
 </script>
