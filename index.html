@@ -15,7 +15,14 @@
 
     h2 {
       text-align: center;
+      margin-bottom: 5px;
+    }
+
+    #tanggal {
+      text-align: center;
+      font-weight: bold;
       margin-bottom: 20px;
+      color: #555;
     }
 
     .box {
@@ -52,14 +59,15 @@
 <body>
 
 <h2>📊 Target & Hasil Penjualan</h2>
+<div id="tanggal"></div>
 
 <!-- HARIAN -->
 <div class="box">
 
   <h3>TARGET DAN HASIL HARIAN</h3>
 
-  <input type="number" id="targetHarian" placeholder="Target Weekdays / Weekend">
-  <input type="number" id="hasilHarian" placeholder="Hasil Harian">
+  <input type="number" id="targetHarian" placeholder="Target Weekdays / Weekend (Rp)">
+  <input type="number" id="hasilHarian" placeholder="Hasil Harian (Rp)">
 
   <button onclick="hitungHarian()">Hitung</button>
 
@@ -72,8 +80,8 @@
 
   <h3>TARGET DAN HASIL BULANAN</h3>
 
-  <input type="number" id="targetBulanan" placeholder="Target Bulanan">
-  <input type="number" id="actualBulanan" placeholder="Actual Sales">
+  <input type="number" id="targetBulanan" placeholder="Target Bulanan (Rp)">
+  <input type="number" id="actualBulanan" placeholder="Actual Sales (Rp)">
 
   <button onclick="hitungBulanan()">Hitung</button>
 
@@ -82,10 +90,31 @@
 </div>
 
 <script>
+function formatRupiah(angka){
+  return "Rp " + angka.toLocaleString("id-ID");
+}
+
+// Tampilkan tanggal hari ini
+function tampilkanTanggal(){
+  let today = new Date();
+
+  let options = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  };
+
+  document.getElementById("tanggal").innerHTML =
+    today.toLocaleDateString("id-ID", options);
+}
+
+tampilkanTanggal();
+
 function hitungHarian(){
 
-  let target = Number(document.getElementById("targetHarian").value);
-  let hasil = Number(document.getElementById("hasilHarian").value);
+  let target = Number(targetHarian.value);
+  let hasil = Number(hasilHarian.value);
 
   if(target === 0){
     alert("Target tidak boleh 0");
@@ -93,25 +122,25 @@ function hitungHarian(){
   }
 
   let selisihRp = hasil - target;
-  let persen = (hasil / target) * 100;
+  let persen = Math.round((hasil / target) * 100);
   let selisihPersen = persen - 100;
 
   let statusRp = selisihRp >= 0 ? "Lebih" : "Kurang";
   let statusPersen = selisihPersen >= 0 ? "Lebih" : "Kurang";
 
-  document.getElementById("outputHarian").innerHTML = `
-    Target Weekdays/Weekend : ${target}<br>
-    Hasil Harian : ${hasil}<br>
-    Selisih (${statusRp}) (Rp) : ${Math.abs(selisihRp)}<br>
-    Persentase Pencapaian Target : ${persen.toFixed(2)}%<br>
-    Selisih (${statusPersen}) (%) : ${Math.abs(selisihPersen).toFixed(2)}%
+  outputHarian.innerHTML = `
+    Target Weekdays/Weekend : ${formatRupiah(target)}<br>
+    Hasil Harian : ${formatRupiah(hasil)}<br>
+    Selisih (${statusRp}) (Rp) : ${formatRupiah(Math.abs(selisihRp))}<br>
+    Persentase Pencapaian Target : ${persen}%<br>
+    Selisih (${statusPersen}) (%) : ${Math.abs(selisihPersen)}%
   `;
 }
 
 function hitungBulanan(){
 
-  let target = Number(document.getElementById("targetBulanan").value);
-  let actual = Number(document.getElementById("actualBulanan").value);
+  let target = Number(targetBulanan.value);
+  let actual = Number(actualBulanan.value);
 
   if(target === 0){
     alert("Target tidak boleh 0");
@@ -119,18 +148,18 @@ function hitungBulanan(){
   }
 
   let selisihRp = actual - target;
-  let persen = (actual / target) * 100;
+  let persen = Math.round((actual / target) * 100);
   let selisihPersen = persen - 100;
 
   let statusRp = selisihRp >= 0 ? "Lebih" : "Kurang";
   let statusPersen = selisihPersen >= 0 ? "Lebih" : "Kurang";
 
-  document.getElementById("outputBulanan").innerHTML = `
-    Target Bulanan : ${target}<br>
-    Actual Sales : ${actual}<br>
-    Selisih (${statusRp}) (Rp) : ${Math.abs(selisihRp)}<br>
-    Persentase Pencapaian Target : ${persen.toFixed(2)}%<br>
-    Selisih (${statusPersen}) (%) : ${Math.abs(selisihPersen).toFixed(2)}%
+  outputBulanan.innerHTML = `
+    Target Bulanan : ${formatRupiah(target)}<br>
+    Actual Sales : ${formatRupiah(actual)}<br>
+    Selisih (${statusRp}) (Rp) : ${formatRupiah(Math.abs(selisihRp))}<br>
+    Persentase Pencapaian Target : ${persen}%<br>
+    Selisih (${statusPersen}) (%) : ${Math.abs(selisihPersen)}%
   `;
 }
 </script>
