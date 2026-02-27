@@ -1,78 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Target & Hasil Penjualan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 25px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .result {
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        .date {
+            text-align: center;
+            margin-bottom: 15px;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>📊 Target & Hasil Penjualan</h1>
+
+    <div class="date" id="today"></div>
+
+    <!-- HARIAN -->
+    <h2>TARGET DAN HASIL HARIAN</h2>
+
+    <input type="number" id="targetHarian" placeholder="Target Weekdays / Weekend">
+    <input type="number" id="hasilHarian" placeholder="Hasil Harian">
+
+    <button onclick="hitungHarian()">Hitung Harian</button>
+
+    <div class="result" id="hasilHarianView"></div>
+
+    <!-- BULANAN -->
+    <h2>TARGET DAN HASIL BULANAN</h2>
+
+    <input type="number" id="targetBulanan" placeholder="Target Bulanan">
+    <input type="number" id="actualBulanan" placeholder="Actual Sales">
+
+    <button onclick="hitungBulanan()">Hitung Bulanan</button>
+
+    <div class="result" id="hasilBulananView"></div>
+
+</div>
+
 <script>
-function formatRupiah(angka){
-  return "Rp " + angka.toLocaleString("id-ID");
-}
 
-// Tanggal otomatis
-function tampilkanTanggal(){
-  let today = new Date();
+    // Format Rupiah
+    function rupiah(angka) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+        }).format(angka);
+    }
 
-  let options = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  };
+    // Tanggal otomatis
+    const today = new Date().toLocaleDateString("id-ID", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    });
 
-  document.getElementById("tanggal").innerHTML =
-    today.toLocaleDateString("id-ID", options);
-}
+    document.getElementById("today").innerText = today;
 
-tampilkanTanggal();
+    // Hitung Harian
+    function hitungHarian() {
 
-function hitungHarian(){
+        let target = Number(document.getElementById("targetHarian").value);
+        let hasil = Number(document.getElementById("hasilHarian").value);
 
-  let target = Number(targetHarian.value);
-  let hasil = Number(hasilHarian.value);
+        if (!target || !hasil) {
+            alert("Isi dulu semua angka!");
+            return;
+        }
 
-  if(target === 0){
-    alert("Target tidak boleh 0");
-    return;
-  }
+        let selisih = hasil - target;
+        let persen = Math.round((hasil / target) * 100);
+        let persenSelisih = Math.round(((hasil - target) / target) * 100);
 
-  let selisihRp = hasil - target;
+        document.getElementById("hasilHarianView").innerHTML = `
+        Target : ${rupiah(target)} <br>
+        Hasil : ${rupiah(hasil)} <br>
+        Selisih : ${rupiah(selisih)} <br>
+        Persentase : ${persen}% <br>
+        Selisih (%) : ${persenSelisih}%
+        `;
+    }
 
-  // BULATIN %
-  let persen = Math.round((hasil / target) * 100);
-  let selisihPersen = persen - 100;
+    // Hitung Bulanan
+    function hitungBulanan() {
 
-  let statusRp = selisihRp >= 0 ? "Lebih" : "Kurang";
-  let statusPersen = selisihPersen >= 0 ? "Lebih" : "Kurang";
+        let target = Number(document.getElementById("targetBulanan").value);
+        let actual = Number(document.getElementById("actualBulanan").value);
 
-  outputHarian.innerHTML = `
-    Target Weekdays/Weekend : ${formatRupiah(target)}<br>
-    Hasil Harian : ${formatRupiah(hasil)}<br>
-    Selisih (${statusRp}) (Rp) : ${formatRupiah(Math.abs(selisihRp))}<br>
-    Persentase Pencapaian Target : ${persen}%<br>
-    Selisih (${statusPersen}) (%) : ${Math.abs(selisihPersen)}%
-  `;
-}
+        if (!target || !actual) {
+            alert("Isi dulu semua angka!");
+            return;
+        }
 
-function hitungBulanan(){
+        let selisih = actual - target;
+        let persen = Math.round((actual / target) * 100);
+        let persenSelisih = Math.round(((actual - target) / target) * 100);
 
-  let target = Number(targetBulanan.value);
-  let actual = Number(actualBulanan.value);
+        document.getElementById("hasilBulananView").innerHTML = `
+        Target : ${rupiah(target)} <br>
+        Actual : ${rupiah(actual)} <br>
+        Selisih : ${rupiah(selisih)} <br>
+        Persentase : ${persen}% <br>
+        Selisih (%) : ${persenSelisih}%
+        `;
+    }
 
-  if(target === 0){
-    alert("Target tidak boleh 0");
-    return;
-  }
-
-  let selisihRp = actual - target;
-
-  // BULATIN %
-  let persen = Math.round((actual / target) * 100);
-  let selisihPersen = persen - 100;
-
-  let statusRp = selisihRp >= 0 ? "Lebih" : "Kurang";
-  let statusPersen = selisihPersen >= 0 ? "Lebih" : "Kurang";
-
-  outputBulanan.innerHTML = `
-    Target Bulanan : ${formatRupiah(target)}<br>
-    Actual Sales : ${formatRupiah(actual)}<br>
-    Selisih (${statusRp}) (Rp) : ${formatRupiah(Math.abs(selisihRp))}<br>
-    Persentase Pencapaian Target : ${persen}%<br>
-    Selisih (${statusPersen}) (%) : ${Math.abs(selisihPersen)}%
-  `;
-}
 </script>
+
+</body>
+</html>
